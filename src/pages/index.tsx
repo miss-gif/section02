@@ -2,10 +2,10 @@ import BookItem from "@/components/book-item";
 import SearchableLayout from "@/components/searchable-layout";
 import fetchBooks from "@/lib/fetch-books";
 import fetchRandomBooks from "@/lib/fetch-random-books";
-import { InferGetServerSidePropsType } from "next";
+import { InferGetStaticPropsType } from "next";
 import { ReactNode } from "react";
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   const [allBooks, randomBooks] = await Promise.all([
     fetchBooks(),
     fetchRandomBooks(),
@@ -19,7 +19,7 @@ export const getServerSideProps = async () => {
 const Home = ({
   allBooks,
   randomBooks,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <div className="p-4">
       <section className="mb-8">
