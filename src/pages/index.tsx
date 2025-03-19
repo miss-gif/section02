@@ -13,7 +13,6 @@ export const getStaticProps = async () => {
 
   return {
     props: { allBooks, randomBooks },
-    revalidate: 3,
   };
 };
 
