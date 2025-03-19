@@ -1,18 +1,38 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import fetchOneBooks from "@/lib/fetch-one-book";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { GetServerSidePropsContext, InferGetStaticPropsType } from "next";
+import { useRouter } from "next/router";
 
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
+export const getStaticPaths = async () => {
+  return {
+    paths: [
+      { params: { id: "1" } },
+      { params: { id: "2" } },
+      { params: { id: "3" } },
+    ],
+    fallback: true,
+  };
+};
+
+export const getStaticProps = async (context: GetServerSidePropsContext) => {
   const id = context.params!.id;
   const book = await fetchOneBooks(Number(id));
+
+  // 책이 없을 경우 404 페이지로 이동
+  if (!book) {
+    return { notFound: true };
+  }
 
   return { props: { book } };
 };
 
-const Page = ({
-  book,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Page = ({ book }: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
+
   if (!book) {
     return "문제가 발생했습니다. 다시 시도해주세요.";
   }
