@@ -1,7 +1,7 @@
 import { BookItemProps } from "../../type";
 
 const fetchRandomBooks = async (): Promise<BookItemProps[]> => {
-  const URL = "http://localhost:12345/book/random";
+  const URL = "https://kwak-books-server.vercel.app/random";
 
   try {
     const response = await fetch(URL);

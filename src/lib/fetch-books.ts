@@ -1,7 +1,7 @@
 import { BookItemProps } from "../../type";
 
 const fetchBooks = async (q?: string): Promise<BookItemProps[]> => {
-  let URL = "http://localhost:12345/book";
+  let URL = "https://kwak-books-server.vercel.app";
 
   if (q) {
     URL += `/search?q=${q}`;
