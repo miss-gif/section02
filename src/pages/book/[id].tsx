@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import fetchOneBooks from "@/lib/fetch-one-book";
 import { GetServerSidePropsContext, InferGetStaticPropsType } from "next";
+import Head from "next/head";
 import { useRouter } from "next/router";
 
 export const getStaticPaths = async () => {
@@ -30,7 +31,18 @@ const Page = ({ book }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <title>한입북스</title>
+        <meta property="og:image" content="/thumbnail.png" />
+        <meta property="og:title" content="한입북스" />
+        <meta
+          property="og:description"
+          content="한입에 읽을 수 있는 도서 추천 서비스"
+        />
+        <div>Loading...</div>
+      </>
+    );
   }
 
   if (!book) {
@@ -41,20 +53,28 @@ const Page = ({ book }: InferGetStaticPropsType<typeof getStaticProps>) => {
     book;
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
-      <div className="text-3xl font-bold mb-2">{title}</div>
-      <div className="text-xl text-gray-600 mb-4">{subTitle}</div>
-      <img
-        src={coverImgUrl}
-        alt={title}
-        className="w-64 h-auto mb-6 shadow-md rounded"
-      />
-      <div className="whitespace-pre-line text-gray-800 mb-6">
-        {description}
+    <>
+      <Head>
+        <title>{title}</title>
+        <meta property="og:image" content={coverImgUrl} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+      </Head>
+      <div className="max-w-4xl mx-auto p-4">
+        <div className="text-3xl font-bold mb-2">{title}</div>
+        <div className="text-xl text-gray-600 mb-4">{subTitle}</div>
+        <img
+          src={coverImgUrl}
+          alt={title}
+          className="w-64 h-auto mb-6 shadow-md rounded"
+        />
+        <div className="whitespace-pre-line text-gray-800 mb-6">
+          {description}
+        </div>
+        <div className="text-sm text-gray-700">저자: {author}</div>
+        <div className="text-sm text-gray-700">출판사: {publisher}</div>
       </div>
-      <div className="text-sm text-gray-700">저자: {author}</div>
-      <div className="text-sm text-gray-700">출판사: {publisher}</div>
-    </div>
+    </>
   );
 };
 
